@@ -1,0 +1,133 @@
+const {Client, GatewayIntentBits, EmbedBuilder} = require("discord.js"),
+	{token} = require('./config.json'),
+	moment = require("moment"),
+	sqlite3 = require("sqlite3").verbose(),
+	db = new sqlite3.Database('./database.db'),
+	bot = new Client({
+		intents:[
+			GatewayIntentBits.Guilds,
+			GatewayIntentBits.GuildMembers,
+			GatewayIntentBits.GuildMessages,
+			GatewayIntentBits.GuildVoiceStates
+		]
+	})
+
+let nith;
+
+bot.once("ready", ()=>{
+	console.log(`${bot.user.username} is started at ${moment().format('HH:mm:ss')}`)
+	nith = bot.guilds.cache.get("991658690434318407")
+	nith.logs_channel = nith.channels.cache.get("991661277015457912")//Bot's chat
+})
+bot.on("voiceStateUpdate", async (voice_old, voice_new)=>{
+	if(voice_new.channelId==="991660306092785684"){
+		if(voice_old.channelId!==null){
+			if(voice_old.channel.members.size){
+				let new_owner = voice_old.channel.members.toJSON()[Math.floor(Math.random() * (voice_old.channel.members.size - 1))]
+				voice_old.channel.edit({
+					name:new_owner.user.username+"'s channel",
+					permissionOverwrites: [
+						{
+							id: new_owner.id,
+							allow: ['ManageChannels', 'ManageRoles']
+						}
+					]
+				})
+					.then(voice=>{
+						db.run("update voices set owner_id=? where owner_id=?;",[new_owner.id,voice.channelId])
+					})
+			}else{
+				try{
+					nith.channels.cache.get(voice_old).delete()
+						.then(() => {
+							db.run("DELETE FROM voices WHERE owner_id=?;", [voice_old.id])
+						})
+				}catch (err) {
+					nith.logs_channel.send({
+						embeds:[
+							new EmbedBuilder()
+								.setTitle("ERROR")
+								.setColor("#FF0000")
+								.addField("Error in delete old user channel.","I can't delete channel")
+						]
+					})
+				}
+			}
+		}
+
+		nith.channels.create({
+			name: `${nith.members.cache.find(m=>m.id===voice_new.id).user.username}'s channel`,
+			type:2,
+			parent:'991660199502950522',//ID of category
+			permissionOverwrites:[
+				{
+					id: voice_new.id,
+					allow: ['ManageChannels','ManageRoles']
+				}
+			]
+		}).then(async voice=>{
+			await voice_new.setChannel(voice)
+			db.run(`insert into voices(owner_id, voice_id) values (${voice_new.id},${voice.id});`)
+		})
+	} else if(voice_old.channelId!=="991660306092785684"&&voice_old.channelId!==null){
+		db.get('select * from voices where voice_id =?;', [voice_old.channelId], (err,row)=>{
+			if(err||!row){
+				console.log(err?err:`[${moment().format('HH:mm:ss')}]\n\tmsg: I can't get the own_id from db`)
+				return nith.logs_channel.send({
+					embeds:[
+						new EmbedBuilder()
+							.setTitle("ERROR")
+							.setColor("#FF0000")
+							.addField("Error in Disconnection\/connection","I can't get the own_id from db")
+					]
+				})
+			}
+			if(row.owner_id===voice_old.id){
+				if(!voice_old.channel.members.size){
+					try{
+						voice_old.channel.delete()
+							.then(()=>{
+								db.run("delete from voices where owner_id=?;",[voice_old.id])
+							})
+					}catch (err) {
+						nith.logs_channel.send({
+							embeds:[
+								new EmbedBuilder()
+									.setTitle("ERROR")
+									.setColor("#FF0000")
+									.addFields([
+										{
+											name:"Description",
+											value:"Some error with Deleting Voice Channel."
+										},
+										{
+											name:"Error message",
+											value:err
+										}
+									])
+							]
+						})
+					}
+				}else{
+					let next_voice_owner = voice_old.members.toJSON()[Math.floor(Math.random() * (voice_old.channel.members.size - 1))]
+					db.run("update voices set owner_id=? where voice_id=?;", [next_voice_owner.id, voice_old.channelId],(err)=>{
+						if(err)return console.log(err)
+
+						voice_old.channel.edit({
+							name:next_voice_owner.user.username+"'s channel",
+							permissionOverwrites:[
+								{
+									id: next_voice_owner.id,
+									allow: ['ManageChannels', 'ManageRoles']
+								}
+							]
+						})
+					})
+				}
+			}
+		})
+	}
+})
+
+
+bot.login(token)

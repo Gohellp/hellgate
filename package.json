@@ -1,0 +1,19 @@
+{
+  "name": "hellgate",
+  "version": "0.6.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "node main test",
+    "start": "nodemon main"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "^14.0.3",
+    "moment": "^2.29.4",
+    "sqlite": "^4.1.2",
+    "sqlite3": "^5.0.11"
+  }
+}
