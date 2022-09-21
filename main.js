@@ -20,7 +20,6 @@ bot.once("ready", async ()=>{
 	nith.logs_channel = nith.channels.cache.get("991661277015457912");//Bot's chat
 
 	await nith.channels.cache.get("991659511087628318").threads.fetchArchived(true)
-	nith.test = nith.channels.cache.get("991659511087628318").threads.cache.map(v=> v) //This is threads of channel
 })
 bot.on("messageCreate", async msg =>{
 	if(msg.user.bot)return;
