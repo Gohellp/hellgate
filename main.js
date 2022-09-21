@@ -19,6 +19,23 @@ bot.once("ready", ()=>{
 	nith = bot.guilds.cache.get("991658690434318407")
 	nith.logs_channel = nith.channels.cache.get("991661277015457912")//Bot's chat
 })
+bot.on("messageCreate", async msg =>{
+	if(msg.user.bot)return;
+	db.get("select count(*) from roleplay where forms_channel_id=?",[msg.channelId], (err, count)=>{
+		if(err||!row){
+			console.log(err?err:`[${moment().format('HH:mm:ss')}]\n\tERROR: I can't get the channel ids count from db`)
+			return nith.logs_channel.send({
+				embeds:[
+					new EmbedBuilder()
+						.setTitle("ERROR")
+						.setColor("#FF0000")
+						.addField("Error in checking for a forms channel","I can't get the channel ids count from db")
+				]
+			})
+		}
+		if(count["count()"])msg.react("🤔")
+	})
+})
 bot.on("voiceStateUpdate", async (voice_old, voice_new)=>{
 	if(voice_new.channelId==="991660306092785684"){
 		if(voice_old.channelId!==null){
