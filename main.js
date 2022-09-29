@@ -24,7 +24,7 @@ bot.once("ready", async ()=>{
 bot.on("messageCreate", async msg =>{
 	if(msg.author.bot)return;
 	db.get("select count(*) from roleplay where forms_channel_id=?",[msg.channelId], (err, count)=>{
-		if(err||!row){
+		if(err||!count){
 			console.log(err?err:`[${moment().format('HH:mm:ss')}]\n\tERROR: I can't get the channel ids count from db`)
 			return nith.logs_channel.send({
 				embeds:[
