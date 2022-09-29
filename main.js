@@ -22,7 +22,7 @@ bot.once("ready", async ()=>{
 	await nith.channels.cache.get("991659511087628318").threads.fetchArchived(true)
 })
 bot.on("messageCreate", async msg =>{
-	if(msg.user.bot)return;
+	if(msg.author.bot)return;
 	db.get("select count(*) from roleplay where forms_channel_id=?",[msg.channelId], (err, count)=>{
 		if(err||!row){
 			console.log(err?err:`[${moment().format('HH:mm:ss')}]\n\tERROR: I can't get the channel ids count from db`)
