@@ -14,10 +14,29 @@ const {Client, GatewayIntentBits, EmbedBuilder} = require("discord.js"),
 
 let nith;
 
-bot.once("ready", ()=>{
-	console.log(`${bot.user.username} is started at ${moment().format('HH:mm:ss')}`)
-	nith = bot.guilds.cache.get("991658690434318407")
-	nith.logs_channel = nith.channels.cache.get("991661277015457912")//Bot's chat
+bot.once("ready", async ()=>{
+	console.log(`${bot.user.username} is started at ${moment().format('HH:mm:ss')}`);
+	nith = bot.guilds.cache.get("991658690434318407");
+	nith.logs_channel = nith.channels.cache.get("991661277015457912");//Bot's chat
+
+	await nith.channels.cache.get("991659511087628318").threads.fetchArchived(true)
+})
+bot.on("messageCreate", async msg =>{
+	if(msg.author.bot)return;
+	db.get("select count(*) from roleplay where forms_channel_id=?",[msg.channelId], (err, count)=>{
+		if(err||!row){
+			console.log(err?err:`[${moment().format('HH:mm:ss')}]\n\tERROR: I can't get the channel ids count from db`)
+			return nith.logs_channel.send({
+				embeds:[
+					new EmbedBuilder()
+						.setTitle("ERROR")
+						.setColor("#FF0000")
+						.addField("Error in checking for a forms channel","I can't get the channel ids count from db")
+				]
+			})
+		}
+		if(count["count()"])msg.react("🤔")
+	})
 })
 bot.on("messageCreate", async msg =>{
 	if(msg.user.bot)return;
