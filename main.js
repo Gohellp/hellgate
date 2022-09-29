@@ -35,7 +35,24 @@ bot.on("messageCreate", async msg =>{
 				]
 			})
 		}
-		if(count["count()"])msg.react("🤔")
+		if(count["count(*)"])msg.react("🤔")
+	})
+})
+bot.on("messageReactionAdd", (react,user)=>{
+	if(user.bot)return;
+	db.get("select count(*) from roleplay where forms_channel_id=?",[react.message.channelId], (err, count)=>{
+		if(err||!count){
+			console.log(err?err:`[${moment().format('HH:mm:ss')}]\n\tERROR: I can't get the channel ids count from db`)
+			return nith.logs_channel.send({
+				embeds:[
+					new EmbedBuilder()
+						.setTitle("ERROR")
+						.setColor("#FF0000")
+						.addField("Error in checking for a forms channel","I can't get the channel ids count from db")
+				]
+			})
+		}
+		if(count["count(*)"])msg.react("🤔")
 	})
 })
 bot.on("voiceStateUpdate", async (voice_old, voice_new)=>{
