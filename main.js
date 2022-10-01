@@ -145,7 +145,7 @@ bot.on("voiceStateUpdate", async (voice_old, voice_new)=>{
 						})
 					}
 				}else{
-					let next_voice_owner = voice_old.members.toJSON()[Math.floor(Math.random() * (voice_old.channel.members.size - 1))]
+					let next_voice_owner = voice_old.channel.members.toJSON()[Math.floor(Math.random() * (voice_old.channel.members.size - 1))]
 					db.run("update voices set owner_id=? where voice_id=?;", [next_voice_owner.id, voice_old.channelId],(err)=>{
 						if(err)return console.log(err)
 
