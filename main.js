@@ -31,7 +31,7 @@ bot.on("messageCreate", async msg =>{
 					new EmbedBuilder()
 						.setTitle("ERROR")
 						.setColor("#FF0000")
-						.addField("Error in checking for a forms channel","I can't get the channel ids count from db")
+						.addFields("Error in checking for a forms channel","I can't get the channel ids count from db")
 				]
 			})
 		}
@@ -48,7 +48,7 @@ bot.on("messageReactionAdd", (react,user)=>{
 					new EmbedBuilder()
 						.setTitle("ERROR")
 						.setColor("#FF0000")
-						.addField("Error in checking for a forms channel","I can't get the channel ids count from db")
+						.addFields("Error in checking for a forms channel","I can't get the channel ids count from db")
 				]
 			})
 		}
@@ -114,7 +114,7 @@ bot.on("voiceStateUpdate", async (voice_old, voice_new)=>{
 						new EmbedBuilder()
 							.setTitle("ERROR")
 							.setColor("#FF0000")
-							.addField("Error in Disconnection\/connection","I can't get the own_id from db")
+							.addFields("Error in Disconnection\/connection","I can't get the own_id from db")
 					]
 				})
 			}
