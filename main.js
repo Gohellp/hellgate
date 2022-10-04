@@ -84,7 +84,7 @@ bot.on("voiceStateUpdate", async (voice_old, voice_new)=>{
 							new EmbedBuilder()
 								.setTitle("ERROR")
 								.setColor("#FF0000")
-								.addField("Error in delete old user channel.","I can't delete channel")
+								.addFields({name:"Error in delete old user channel.", value:"I can't delete channel"})
 						]
 					})
 				}
