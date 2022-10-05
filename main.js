@@ -31,7 +31,16 @@ bot.on("messageCreate", async msg =>{
 					new EmbedBuilder()
 						.setTitle("ERROR")
 						.setColor("#FF0000")
-						.addFields("Error in checking for a forms channel","I can't get the channel ids count from db")
+						.addFields([
+							{
+								name:"Error in checking for a forms channel",
+								value:"I can't get the channel ids count from db"
+							},
+							{
+								name:"Error message",
+								value:err
+							}
+						])
 				]
 			})
 		}
@@ -48,7 +57,16 @@ bot.on("messageReactionAdd", (react,user)=>{
 					new EmbedBuilder()
 						.setTitle("ERROR")
 						.setColor("#FF0000")
-						.addFields("Error in checking for a forms channel","I can't get the channel ids count from db")
+						.addFields([
+							{
+								name:"Error in checking for a forms channel",
+								value:"I can't get the channel ids count from db"
+							},
+							{
+								name:"Error message",
+								value:err
+							}
+						])
 				]
 			})
 		}
@@ -65,7 +83,7 @@ bot.on("voiceStateUpdate", async (voice_old, voice_new)=>{
 					permissionOverwrites: [
 						{
 							id: new_owner.id,
-							allow: ['ManageChannels', 'ManageRoles']
+							allow: ['ManageChannels', 'ManageRoles', 'MuteMembers', 'DeafenMembers']
 						}
 					]
 				})
@@ -74,9 +92,9 @@ bot.on("voiceStateUpdate", async (voice_old, voice_new)=>{
 					})
 			}else{
 				try{
-					nith.channels.cache.get(voice_old).delete()
+					voice_old.channel.delete()
 						.then(() => {
-							db.run("DELETE FROM voices WHERE owner_id=?;", [voice_old.id])
+							db.run("delete from voices where owner_id=?;",[voice_old.id])
 						})
 				}catch (err) {
 					nith.logs_channel.send({
@@ -84,7 +102,15 @@ bot.on("voiceStateUpdate", async (voice_old, voice_new)=>{
 							new EmbedBuilder()
 								.setTitle("ERROR")
 								.setColor("#FF0000")
-								.addFields({name:"Error in delete old user channel.", value:"I can't delete channel"})
+								.addFields([
+									{
+										name:"Error in delete old user channel.",
+										value:"I can't delete channel"
+									},
+									{
+										name:"Error message",
+										value:err
+									}])
 						]
 					})
 				}
@@ -98,7 +124,7 @@ bot.on("voiceStateUpdate", async (voice_old, voice_new)=>{
 			permissionOverwrites:[
 				{
 					id: voice_new.id,
-					allow: ['ManageChannels','ManageRoles']
+					allow: ['ManageChannels','ManageRoles', 'MuteMembers', 'DeafenMembers']
 				}
 			]
 		}).then(async voice=>{
@@ -114,7 +140,15 @@ bot.on("voiceStateUpdate", async (voice_old, voice_new)=>{
 						new EmbedBuilder()
 							.setTitle("ERROR")
 							.setColor("#FF0000")
-							.addFields("Error in Disconnection\/connection","I can't get the own_id from db")
+							.addFields([
+								{
+									name:"Error in Disconnection\/connection",
+									value:"I can't get the own_id from db"
+								},
+								{
+									name:"Error message",
+									value:err
+								}])
 					]
 				})
 			}
@@ -154,7 +188,7 @@ bot.on("voiceStateUpdate", async (voice_old, voice_new)=>{
 							permissionOverwrites:[
 								{
 									id: next_voice_owner.id,
-									allow: ['ManageChannels', 'ManageRoles']
+									allow: ['ManageChannels', 'ManageRoles', 'MuteMembers', 'DeafenMembers']
 								}
 							]
 						})
