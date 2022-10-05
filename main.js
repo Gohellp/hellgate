@@ -31,7 +31,7 @@ bot.on("messageCreate", async msg =>{
 					new EmbedBuilder()
 						.setTitle("ERROR")
 						.setColor("#FF0000")
-						.addFields([
+						.addFields(
 							{
 								name:"Error in checking for a forms channel",
 								value:"I can't get the channel ids count from db"
@@ -40,7 +40,7 @@ bot.on("messageCreate", async msg =>{
 								name:"Error message",
 								value:err
 							}
-						])
+						)
 				]
 			})
 		}
@@ -57,7 +57,7 @@ bot.on("messageReactionAdd", (react,user)=>{
 					new EmbedBuilder()
 						.setTitle("ERROR")
 						.setColor("#FF0000")
-						.addFields([
+						.addFields(
 							{
 								name:"Error in checking for a forms channel",
 								value:"I can't get the channel ids count from db"
@@ -66,7 +66,7 @@ bot.on("messageReactionAdd", (react,user)=>{
 								name:"Error message",
 								value:err
 							}
-						])
+						)
 				]
 			})
 		}
@@ -102,7 +102,7 @@ bot.on("voiceStateUpdate", async (voice_old, voice_new)=>{
 							new EmbedBuilder()
 								.setTitle("ERROR")
 								.setColor("#FF0000")
-								.addFields([
+								.addFields(
 									{
 										name:"Error in delete old user channel.",
 										value:"I can't delete channel"
@@ -110,7 +110,7 @@ bot.on("voiceStateUpdate", async (voice_old, voice_new)=>{
 									{
 										name:"Error message",
 										value:err
-									}])
+									})
 						]
 					})
 				}
@@ -140,7 +140,7 @@ bot.on("voiceStateUpdate", async (voice_old, voice_new)=>{
 						new EmbedBuilder()
 							.setTitle("ERROR")
 							.setColor("#FF0000")
-							.addFields([
+							.addFields(
 								{
 									name:"Error in Disconnection\/connection",
 									value:"I can't get the own_id from db"
@@ -148,7 +148,7 @@ bot.on("voiceStateUpdate", async (voice_old, voice_new)=>{
 								{
 									name:"Error message",
 									value:err
-								}])
+								})
 					]
 				})
 			}
@@ -165,7 +165,7 @@ bot.on("voiceStateUpdate", async (voice_old, voice_new)=>{
 								new EmbedBuilder()
 									.setTitle("ERROR")
 									.setColor("#FF0000")
-									.addFields([
+									.addFields(
 										{
 											name:"Description",
 											value:"Some error with Deleting Voice Channel."
@@ -173,8 +173,7 @@ bot.on("voiceStateUpdate", async (voice_old, voice_new)=>{
 										{
 											name:"Error message",
 											value:err
-										}
-									])
+										})
 							]
 						})
 					}
