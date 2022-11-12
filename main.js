@@ -38,7 +38,7 @@ bot.on("messageCreate", async msg =>{
 							},
 							{
 								name:"Error message",
-								value:err
+								value:err.message
 							}
 						)
 				]
@@ -64,7 +64,7 @@ bot.on("messageReactionAdd", (react,user)=>{
 							},
 							{
 								name:"Error message",
-								value:err
+								value:err.message
 							}
 						)
 				]
@@ -73,7 +73,7 @@ bot.on("messageReactionAdd", (react,user)=>{
 		if(count["count(*)"])msg.react("🤔")
 	})
 })
-bot.on("voiceStateUpdate", async (voice_old, voice_new)=>{
+bot.on("voiceStateUpdate", (voice_old, voice_new)=>{
 	if(voice_new.channelId==="991660306092785684"){
 		if(voice_old.channelId!==null){
 			if(voice_old.channel.members.size){
@@ -109,7 +109,7 @@ bot.on("voiceStateUpdate", async (voice_old, voice_new)=>{
 									},
 									{
 										name:"Error message",
-										value:err
+										value:err.message
 									})
 						]
 					})
@@ -129,10 +129,8 @@ bot.on("voiceStateUpdate", async (voice_old, voice_new)=>{
 			]
 		}).then(async voice=>{
 			await voice_new.setChannel(voice)
-			try {
-				db.run(`insert into voices(owner_id, voice_id) values (${voice_new.id},${voice.id});`)
-			}catch (err) {
-				nith.logs_channel.send({
+			db.run(`insert into voices(owner_id, voice_id) values (${voice_new.id},${voice.id});`, err=>{
+				if(err)nith.logs_channel.send({
 					embeds:[
 						new EmbedBuilder()
 							.setTitle("ERROR")
@@ -144,11 +142,11 @@ bot.on("voiceStateUpdate", async (voice_old, voice_new)=>{
 								},
 									{
 										name:"Error message",
-										value:err?err:"Idk"
+										value:err?err.message:"Idk"
 									}])
 					]
 				})
-			}
+			})
 		})
 	} else if(voice_old.channelId!=="991660306092785684"&&voice_old.channelId!==null&&voice_old.channelId!==voice_new.channelId){
 		db.get('select * from voices where voice_id =?;', [voice_old.channelId], (err,row)=>{
@@ -166,7 +164,7 @@ bot.on("voiceStateUpdate", async (voice_old, voice_new)=>{
 								},
 								{
 									name:"Error message",
-									value:err?err:"Row was not received"
+									value:err?err.message:"Row was not received"
 								}])
 					]
 				})
@@ -191,7 +189,7 @@ bot.on("voiceStateUpdate", async (voice_old, voice_new)=>{
 										},
 										{
 											name:"Error message",
-											value:err
+											value:err.message
 										})
 							]
 						})
