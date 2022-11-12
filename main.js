@@ -131,7 +131,7 @@ bot.on("voiceStateUpdate", async (voice_old, voice_new)=>{
 			await voice_new.setChannel(voice)
 			db.run(`insert into voices(owner_id, voice_id) values (${voice_new.id},${voice.id});`)
 		})
-	} else if(voice_old.channelId!=="991660306092785684"&&voice_old.channelId!==null){
+	} else if(voice_old.channelId!=="991660306092785684"&&voice_old.channelId!==null&&voice_old.channelId!==voice_new.channelId){
 		db.get('select * from voices where voice_id =?;', [voice_old.channelId], (err,row)=>{
 			if(err||!row){
 				console.log(err?err:`[${moment().format('HH:mm:ss')}]\n\tmsg: I can't get the own_id from db`)
