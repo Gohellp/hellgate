@@ -130,7 +130,7 @@ bot.on("voiceStateUpdate", async (voice_old, voice_new)=>{
 		}).then(async voice=>{
 			await voice_new.setChannel(voice)
 			try {
-				setTimeout(db.run, 1000, `insert into voices(owner_id, voice_id) values (${voice_new.id},${voice.id});`)
+				db.run(`insert into voices(owner_id, voice_id) values (${voice_new.id},${voice.id});`)
 			}catch (err) {
 				nith.logs_channel.send({
 					embeds:[
