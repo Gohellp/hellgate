@@ -74,7 +74,6 @@ bot.on("messageReactionAdd", (react,user)=>{
 	})
 })
 bot.on("voiceStateUpdate", (voice_old, voice_new)=>{
-	if(voice_new.channelId==="991660306092785684"){
 	if(voice_new.channelId==="991660306092785684"){	
 		if(voice_old.channelId!==null){
 			if(voice_old.channel.members.size){
@@ -89,6 +88,7 @@ bot.on("voiceStateUpdate", (voice_old, voice_new)=>{
 					]
 				})
 					.then(voice=>{
+					db.run("update voices set owner_id=? where voice_id=?;",[new_owner.id,voice.channelId])
 					})
 			}else{
 				try{
