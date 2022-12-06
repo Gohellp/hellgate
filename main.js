@@ -8,7 +8,8 @@ const {Client, GatewayIntentBits, EmbedBuilder} = require("discord.js"),
 			GatewayIntentBits.Guilds,
 			GatewayIntentBits.GuildMembers,
 			GatewayIntentBits.GuildMessages,
-			GatewayIntentBits.GuildVoiceStates
+			GatewayIntentBits.GuildVoiceStates,
+			GatewayIntentBits.GuildMessageReactions
 		]
 	})
 
@@ -48,29 +49,19 @@ bot.on("messageCreate", async msg =>{
 	})
 })
 bot.on("messageReactionAdd", (react,user)=>{
-	if(user.bot)return;
-	db.get("select count(*) from roleplay where forms_channel_id=?",[react.message.channelId], (err, count)=>{
-		if(err||!count){
-			console.log(err?err:`[${moment().format('HH:mm:ss')}]\n\tERROR: I can't get the channel ids count from db`)
-			return nith.logs_channel.send({
-				embeds:[
-					new EmbedBuilder()
-						.setTitle("ERROR")
-						.setColor("#FF0000")
-						.addFields(
-							{
-								name:"Error in checking for a forms channel",
-								value:"I can't get the channel ids count from db"
-							},
-							{
-								name:"Error message",
-								value:err.message
-							}
-						)
-				]
-			})
-		}
-		if(count["count(*)"])msg.react("🤔")
+	if(react.me)return;
+	db.get("SELECT EXISTS(SELECT * FROM roleplay where forms_channel_id = ?)",[react.message.channelId], (err, bool)=>{
+		if(err)console.log(err)
+
+		if(bool)
+			if(nith.members.cache.get(user.id).roles.cache.has("991673478908481599")){
+				if(react.emoji.name==="✅"){
+					react.message.reactions.cache.get("🤔").remove()
+				}
+			}else{
+				react.remove()
+				user.send("https://www.youtube.com/watch?v=N9iyAeu7wac")
+			}
 	})
 })
 bot.on("voiceStateUpdate", (voice_old, voice_new)=>{
