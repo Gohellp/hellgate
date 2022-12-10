@@ -53,7 +53,7 @@ bot.on("messageReactionAdd", (react,user)=>{
 	db.get("SELECT EXISTS(SELECT * FROM roleplay where forms_channel_id = ?)",[react.message.channelId], (err, bool)=>{
 		if(err)console.log(err)
 
-		if(bool)
+		if(bool['EXISTS(SELECT * FROM roleplay where forms_channel_id = ?)'])
 			if(nith.members.cache.get(user.id).roles.cache.has("991673478908481599")){
 				if(react.emoji.name==="✅"){
 					react.message.reactions.cache.get("🤔").remove()
