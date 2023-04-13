@@ -66,7 +66,7 @@ bot.on("messageReactionAdd", (react,user)=>{
 			}
 	})
 })
-bot.on("voiceStateUpdate", (voice_old, voice_new)=>{
+bot.on("voiceStateUpdate", async(voice_old, voice_new)=>{
 	if(voice_new.channelId==="991660306092785684"){	
 			await Connected(voice_old, voice_new, nith)
 	} else if(voice_old.channelId!=="991660306092785684"&&voice_old.channelId!==null&&voice_old.channelId!==voice_new.channelId){
