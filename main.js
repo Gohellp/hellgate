@@ -1,16 +1,17 @@
-const {Client, Collection, Events, GatewayIntentBits, EmbedBuilder} = require("discord.js"),
+const {Client, Collection, GatewayIntentBits} = require("discord.js"),
 	fs = require('node:fs'),
 	moment = require("moment"),
 	path = require('node:path'),
 	sqlite3 = require("sqlite3").verbose(),
 	foldersPath = path.join(__dirname, 'commands'),
-	//{Connected, Disconnected} = require("./src/voice_handler"),
+	{Connected, Disconnected} = require("./src/voice_handler"),
 	commandFolders = fs.readdirSync(foldersPath),
 	bot = new Client({
 		intents:[
 			GatewayIntentBits.Guilds,
 			GatewayIntentBits.GuildMembers,
 			GatewayIntentBits.GuildMessages,
+			GatewayIntentBits.MessageContent,
 			GatewayIntentBits.GuildVoiceStates,
 			GatewayIntentBits.GuildMessageReactions
 		]
@@ -44,8 +45,6 @@ bot.once("ready", async ()=>{
 	nith = bot.guilds.cache.get("991658690434318407");
 	nith.logs_channel = nith.channels.cache.get("991661277015457912");//Bot's chat
 	nith.db = new sqlite3.Database('./database.db')
-
-	//await nith.channels.cache.get("991659511087628318").threads.fetchArchived(true)
 })
 bot.on("interactionCreate", async interaction=>{
 	if (!interaction.isChatInputCommand()) return;
@@ -69,13 +68,13 @@ bot.on("interactionCreate", async interaction=>{
 		}
 	}
 })
-/*bot.on("voiceStateUpdate", async (voice_old, voice_new)=>{
+bot.on("voiceStateUpdate", async (voice_old, voice_new)=>{
 	if(voice_new.channelId==="991660306092785684"){	
 			await Connected(voice_old, voice_new, nith)
 	} else if(voice_old.channelId!=="991660306092785684"&&voice_old.channelId!==null&&voice_old.channelId!==voice_new.channelId){
 			await Disconnected(voice_old, voice_new, nith)
 	}
-})*/
+})
 
 
 bot.login(token)
