@@ -1,4 +1,4 @@
-const {Client, Collection, GatewayIntentBits} = require("discord.js"),
+const {Client, Collection, GatewayIntentBits,EmbedBuilder} = require("discord.js"),
 	fs = require('node:fs'),
 	moment = require("moment"),
 	path = require('node:path'),
@@ -47,6 +47,38 @@ bot.once("ready", async ()=>{
 	nith.db = new sqlite3.Database('./database.db')
 })
 bot.on("interactionCreate", async interaction=>{
+	if(interaction.isButton()){
+		const options = interaction.customId.replace("approve_","").replace("reject_","").split("^")
+		if(interaction.customId.startsWith("approve")){
+			nith.members.cache.get(options[1]).send({
+				embeds:[
+					new EmbedBuilder()
+						.setTitle("INFO")
+						.setColor("#00ffff")
+						.addFields({
+							name:"Message",
+							value:"Your form have been approved just now!\nGood luck in your roleplay!"
+						})
+				]
+			})
+			nith.db.run("update forms set status=1 where id=?;", options[0], ()=>{
+				interaction.update({
+					components:[],
+					embeds:[
+						new EmbedBuilder()
+							.setTitle('INFO')
+							.setColor('#00ffff')
+							.addFields({
+								name:"Message",
+								value:`Form ${options[0]} has been approved!`
+							})
+					]
+				})
+			})
+		}else{
+
+		}
+	}
 	if (!interaction.isChatInputCommand()) return;
 
 	interaction.db = nith.db;
