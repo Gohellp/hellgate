@@ -1,11 +1,8 @@
-const {Client, Collection, GatewayIntentBits,EmbedBuilder} = require("discord.js"),
-	fs = require('node:fs'),
+const {Client, GatewayIntentBits,EmbedBuilder} = require("discord.js"),
+	{createCollection} = require("./src/collections.js"),
 	moment = require("moment"),
-	path = require('node:path'),
 	sqlite3 = require("sqlite3").verbose(),
-	foldersPath = path.join(__dirname, 'commands'),
 	{Connected, Disconnected} = require("./src/voice_handler"),
-	commandFolders = fs.readdirSync(foldersPath),
 	bot = new Client({
 		intents:[
 			GatewayIntentBits.Guilds,
@@ -19,28 +16,13 @@ const {Client, Collection, GatewayIntentBits,EmbedBuilder} = require("discord.js
 
 let nith,
 	{token} = require('./config.json');
-bot.commands = new Collection();
-
-for (const folder of commandFolders) {
-	const commandsPath = path.join(foldersPath, folder);
-	const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
-	for (const file of commandFiles) {
-		const filePath = path.join(commandsPath, file);
-		const command = require(filePath);
-		// Set a new item in the Collection with the key as the command name and the value as the exported module
-		if ('data' in command && 'execute' in command) {
-			bot.commands.set(command.data.name, command);
-		} else {
-			console.log(`[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`);
-		}
-	}
-}
 
 if (process.argv[2] && process.argv[2] === '-t') {
 	token = "MTA5NzA3NDk4MDkxMjYzMTgyOA.GDyri1.3uF-9ntzcrcBc3W4Rkh_fHoL6rztRownzuZd50";
 }
 
 bot.once("ready", async ()=>{
+	createCollection("commands",bot)
 	console.log(`${bot.user.username} is started at ${moment().format('HH:mm:ss')}`);
 	nith = bot.guilds.cache.get("991658690434318407");
 	nith.logs_channel = nith.channels.cache.get("991661277015457912");//Bot's chat
