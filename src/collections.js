@@ -2,13 +2,13 @@ const {Collection} = require("discord.js"),
 	path = require('node:path'),
 	fs = require('node:fs')
 
-/** This func create bot's collection field with dir's name
- *
- * @param dirName - Name of dir contains the dirs with commands
- * @param bot - Discord client's variable
- * @param exceptions - array of exceptions of files or folders
- */
 module.exports= {
+	/** This func create bot's collection field with dir's name
+	 *
+	 * @param dirName - Name of dir contains the dirs with commands
+	 * @param bot - Discord client's variable
+	 * @param exceptions - array of exceptions of files or folders
+	 */
 	createCollection(dirName, bot, ...exceptions)
 	{
 		bot[dirName] = new Collection()
