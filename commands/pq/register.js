@@ -30,7 +30,7 @@ module.exports = {
                 .setRequired(false)
         ),
     async execute(interaction) {
-        const target = interaction.options.get("target")?interaction.options.get("target"):interaction.user
+        const target = interaction.options.get("target")?interaction.options.get("target").value:interaction.user
 
         if(interaction.options.get("target")||interaction.options.get("type")){
             interaction.db.get("select iif(exists(select 1 from players where discord_id=$t),2,iif(exists(select 1 from players where discord_id=$a),iif((select type from players where discord_id=$a)>1,1,0),-1)) as status;",{$t:target.value, $a:interaction.user.id},(err, row)=>{
@@ -102,7 +102,7 @@ module.exports = {
                 }
             })
         }else{
-            interaction.db.get("select exists(select 1 from players where discord_id=?) as status;", target.value, (err,row)=>{
+            interaction.db.get("select exists(select players.id from players where discord_id=?) as status;", target.id, (err,row)=>{
                 if(err)return console.log(err)
                 if(!row.status){
                     interaction.db.run("insert into players(discord_id) values(?)",target.value)
