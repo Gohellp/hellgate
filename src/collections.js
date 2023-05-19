@@ -12,7 +12,7 @@ module.exports= {
 	createCollection(dirName, bot, ...exceptions)
 	{
 		bot[dirName] = new Collection()
-		const foldersPath = path.join(__dirname, dirName),
+		const foldersPath = path.join(process.cwd(), dirName),
 			commandFolders = fs.readdirSync(foldersPath)
 
 		for (const folder of commandFolders) {

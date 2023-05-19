@@ -325,9 +325,9 @@ module.exports = {
 						case 0://Normal status code
 							const params={
 								$p_id: row.id,
-								$name:interaction.options.getString("name"),
-								$dist:interaction.options.getString("distortion"),
-								$look:interaction.options.getString("appearance"),
+								$name:interaction.options.getString("name").value,
+								$dist:interaction.options.getString("distortion").value,
+								$look:interaction.options.getString("appearance").value,
 								$art:interaction.options.getAttachment("appearance_art")?.url
 							}
 							interaction.db.run("insert into forms(player_id, name, look, look_art, distortion) values($p_id,$name,$look,$art,$dist)",params,err=> {
