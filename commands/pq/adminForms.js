@@ -316,16 +316,16 @@ module.exports = {
 						case 0:
 							const params={
 								$p_id:   row.id,
-								$name:   interaction.options.getString("name").value,
-								$type:   interaction.options.getInteger("type").value,
-								$area:   interaction.options.getString("area")?.value,
-								$status: interaction.options.getInteger("status").value,
-								$access: interaction.options.getInteger("access").value,
-								$dist:   interaction.options.getString("distortion").value,
-								$look:   interaction.options.getString("appearance").value,
+								$name:   interaction.options.getString("name"),
+								$type:   interaction.options.getInteger("type"),
+								$area:   interaction.options.getString("area"),
+								$status: interaction.options.getInteger("status"),
+								$access: interaction.options.getInteger("access"),
+								$dist:   interaction.options.getString("distortion"),
+								$look:   interaction.options.getString("appearance"),
 								$art:    interaction.options.getAttachment("appearance_art")?.url
 							}
-							interaction.db.run("insert into forms(name,type,area,status,access_lvl,distortion,look,look_art) values($name,$type,$area,$status,$access,$dist,$look,$art)",params,err1 =>{
+							interaction.db.run("insert into forms(player_id,name,type,area,status,access_lvl,distortion,look,look_art) values($p_id,$name,$type,$area,$status,$access,$dist,$look,$art);",params,err1 =>{
 								if(err1)return console.log(err1)
 								interaction.reply({
 									embeds:[
