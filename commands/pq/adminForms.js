@@ -319,7 +319,7 @@ module.exports = {
 								$name:   interaction.options.getString("name").value,
 								$type:   interaction.options.getInteger("type").value,
 								$area:   interaction.options.getString("area")?.value,
-								$status: interaction.options.getString("status").value,
+								$status: interaction.options.getInteger("status").value,
 								$access: interaction.options.getInteger("access").value,
 								$dist:   interaction.options.getString("distortion").value,
 								$look:   interaction.options.getString("appearance").value,
