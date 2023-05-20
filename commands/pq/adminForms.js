@@ -288,6 +288,18 @@ module.exports = {
 							}
 						})
 						break
+					default:
+						interaction.reply({
+							embeds:[
+								new EmbedBuilder()
+									.setTitle("ERROR")
+									.setColor("#ff0000")
+									.addFields({
+										name:"Message",
+										value:"I forget this option \":D"
+									})
+							]
+						})
 				}
 
 				
