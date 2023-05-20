@@ -201,6 +201,7 @@ module.exports = {
 					new SlashCommandStringOption()
 						.setName("area")
 						.setDescription("Корпус проживания персонажа")
+						.setRequired(false)
 				)
 				.addAttachmentOption(
 					new SlashCommandAttachmentOption()
@@ -212,6 +213,7 @@ module.exports = {
 					new SlashCommandUserOption()
 						.setName("target")
 						.setDescription("Target for command")
+						.setRequired(false)
 				)
 		)
 		.addSubcommand(
@@ -316,7 +318,7 @@ module.exports = {
 								$p_id:   row.id,
 								$name:   interaction.options.getString("name").value,
 								$type:   interaction.options.getInteger("type").value,
-								$area:   interaction.options.getInteger("area")?.value,
+								$area:   interaction.options.getString("area")?.value,
 								$status: interaction.options.getString("status").value,
 								$access: interaction.options.getInteger("access").value,
 								$dist:   interaction.options.getString("distortion").value,
