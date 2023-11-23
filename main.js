@@ -15,10 +15,10 @@ const {Client, GatewayIntentBits,EmbedBuilder} = require("discord.js"),
 	})
 
 let nith,
-	{token} = require('./config.json');
+	{token, test_token} = require('./config.json');
 
 if (process.argv[2] && process.argv[2] === '-t') {
-	token = "MTA5NzA3NDk4MDkxMjYzMTgyOA.GDyri1.3uF-9ntzcrcBc3W4Rkh_fHoL6rztRownzuZd50";
+	token = test_token;
 }
 
 bot.once("ready", async ()=>{
